@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Ecom</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="searchbar_hint">Search</string>
+    <string name="seach_content_desc">What do you want to search for ?</string>
+    <string name="filter_fab">filter clothes as you like</string>
+    <string name="popular_products">Popular Products</string>
+    <string name="filter">Filter</string>
+    <string name="all_products">All Products</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="product_name_ex">Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops</string>
+    <string name="dollar">$</string>
+    <string name="price">29.0</string>
+    <string name="description"><![CDATA[3D NAND flash are applied to deliver high transfer speeds Remarkable transfer speeds that enable faster bootup and improved overall system performance. The advanced SLC Cache Technology allows performance boost and longer lifespan 7mm slim design suitable for Ultrabooks and Ultra-slim notebooks. Supports TRIM command, Garbage Collection technology, RAID, and ECC (Error Checking & Correction) to provide the optimized performance and enhanced reliability.]]></string>
+    <string name="add_to_cart">Add to Cart</string>
+</resources>
