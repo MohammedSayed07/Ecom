@@ -12,17 +12,20 @@ class PopularProductsAdapter(
     val productClicked: (Product) -> Unit
 ): ListAdapter<Product, PopularProductsAdapter.ProductsViewHolder>(DiffCallback) {
 
-    class ProductsViewHolder(private var binding: ProductItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(product: Product) {
+    class ProductsViewHolder private constructor(private var binding: ProductItemBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(product: Product, productClicked: (Product) -> Unit) {
             binding.product = product
             binding.executePendingBindings()
+
+            itemView.setOnClickListener {
+                productClicked(product)
+            }
         }
         companion object {
             fun from(parent: ViewGroup): ProductsViewHolder {
                 return ProductsViewHolder(ProductItemBinding.inflate(LayoutInflater.from(parent.context)))
             }
         }
-
     }
 
     private object DiffCallback: DiffUtil.ItemCallback<Product>() {
@@ -42,7 +45,8 @@ class PopularProductsAdapter(
 
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
         val product = getItem(position)
-        holder.bind(product)
+        holder.bind(product, productClicked)
+
 
     }
 
