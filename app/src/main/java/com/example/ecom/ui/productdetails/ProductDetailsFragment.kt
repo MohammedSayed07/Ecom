@@ -37,6 +37,10 @@ class ProductDetailsFragment : Fragment() {
 
         binding.viewModel = viewModel
 
+        binding.backButton.setOnClickListener {
+            findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToNavigationHome())
+        }
+
         return binding.root
     }
 

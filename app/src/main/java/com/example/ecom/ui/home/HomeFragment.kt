@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+
     private var _binding: FragmentHomeBinding? = null
 
     private val homeViewModel: HomeViewModel by viewModels()
@@ -40,8 +41,8 @@ class HomeFragment : Fragment() {
 
         val allProductAdapter = PopularProductsAdapter(
             productClicked = {
-                this.findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToProductDetailsFragment(it))
-            })
+            this.findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToProductDetailsFragment(it))
+        })
 
         binding.saleProductsRecycler.adapter = allProductAdapter
 
