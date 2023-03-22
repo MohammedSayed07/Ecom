@@ -15,7 +15,7 @@ import com.example.ecom.ui.home.StoreApiStatus
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
-        var imgUri = it.toUri().buildUpon().scheme("https").build()
+        var imgUri = it.toUri().buildUpon().scheme("http").build()
         Glide.with(imgView.context)
             .load(imgUri)
             .apply(RequestOptions().placeholder(R.drawable.loading_animation))

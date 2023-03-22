@@ -34,10 +34,11 @@
         <argument
             android:name="product"
             app:argType="com.example.ecom.data.Product" />
-        <action
-            android:id="@+id/action_productDetailsFragment_to_navigation_home"
-            app:destination="@id/navigation_home"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/navigation_home" />
     </fragment>
+    <action
+        android:id="@+id/action_global_navigation_dashboard"
+        app:destination="@id/navigation_dashboard" />
+    <action
+        android:id="@+id/action_global_navigation_notifications"
+        app:destination="@id/navigation_notifications" />
 </navigation>
