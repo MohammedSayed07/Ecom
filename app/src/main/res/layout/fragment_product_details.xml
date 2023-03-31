@@ -9,7 +9,9 @@
             name="viewModel"
             type="com.example.ecom.ui.productdetails.ProductDetailsViewModel" />
     </data>
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -167,9 +169,10 @@
         android:id="@+id/extended_fab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/light_black"
         android:contentDescription="@string/extended_fab_content_desc"
         android:text="@string/add_to_cart"
@@ -182,4 +185,5 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 </layout>
