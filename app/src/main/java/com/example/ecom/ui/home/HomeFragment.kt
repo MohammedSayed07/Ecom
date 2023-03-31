@@ -43,8 +43,8 @@ class HomeFragment : Fragment() {
 
         val allProductAdapter = PopularProductsAdapter(
             productClicked = {
-            this.findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToProductDetailsFragment(it))
-        })
+                this.findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToProductDetailsFragment(it))
+            })
 
         binding.saleProductsRecycler.adapter = allProductAdapter
 
