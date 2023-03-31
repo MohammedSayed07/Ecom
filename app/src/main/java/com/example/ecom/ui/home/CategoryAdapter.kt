@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ecom.databinding.HomeCategoryItemBinding
 
-class CategoryAdapter: ListAdapter<String, CategoryAdapter.ViewHolder>(DiffCallback) {
-    var selectedPosition = 0
+class CategoryAdapter(): ListAdapter<String, CategoryAdapter.ViewHolder>(DiffCallback) {
     var selectedCategory: ((String) -> Unit)? = null
+    lateinit var selectedPosition: (Int) -> Unit
+    var initialSelectedPosition: Int = 0
     inner class ViewHolder(private val binding: HomeCategoryItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
@@ -19,7 +20,7 @@ class CategoryAdapter: ListAdapter<String, CategoryAdapter.ViewHolder>(DiffCallb
             position: Int
         ) {
             binding.category.text = category
-            if (selectedPosition == position) {
+            if (initialSelectedPosition == position) {
                 binding.card.setCardBackgroundColor(Color.parseColor("#000000"))
                 binding.category.setTextColor(Color.parseColor("#FFFFFF"))
             } else {
@@ -27,10 +28,13 @@ class CategoryAdapter: ListAdapter<String, CategoryAdapter.ViewHolder>(DiffCallb
                 binding.category.setTextColor(Color.parseColor("#000000"))
             }
             itemView.setOnClickListener {
-                selectedCategory?.invoke(category)
-                selectedPosition = position
-                notifyDataSetChanged()
+                if (initialSelectedPosition != position) {
+                    selectedCategory?.invoke(category)
+                    selectedPosition(position)
+                    notifyDataSetChanged()
+                }
             }
+
         }
     }
 

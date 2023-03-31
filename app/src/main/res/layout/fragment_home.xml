@@ -127,6 +127,7 @@
                     android:layout_height="0dp"
                     tools:listitem="@layout/product_item"
                     android:clipToPadding="false"
+                    listData="@{viewModel.popularProducts}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

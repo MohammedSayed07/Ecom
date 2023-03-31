@@ -1,6 +1,8 @@
 package com.example.ecom.ui.home
 
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecom.data.Product
@@ -29,16 +31,44 @@ class HomeViewModel @Inject constructor(
     private val _status = MutableStateFlow<StoreApiStatus>(StoreApiStatus.LOADING)
     val status = _status.asStateFlow()
 
+    private val _categoryState = MutableLiveData<Int>()
+    val categoryState: LiveData<Int> get() = _categoryState
+
     init {
-        getAllProducts()
+        _categoryState.value = 0
+        getCategories()
+        getProducts("All")
     }
 
-    private fun getAllProducts() {
+    fun getProducts(string: String) {
         viewModelScope.launch {
-            val result = storeRepository.getAllProducts()
-            _products.value = result
-        }
+            _status.value = StoreApiStatus.LOADING
 
+            val result: List<Product> = withContext(Dispatchers.IO) {
+                if (string == "All") {
+                    storeRepository.getAllProducts()
+                } else {
+                    storeRepository.getProductsOfCategory(string)
+                }
+            }
+
+            _products.value = result
+            _popularProducts.value = result.filter {
+                it.rating.rate > 7.0
+            }
+            _status.value = StoreApiStatus.DONE
+        }
+    }
+
+    private fun getCategories() {
+        viewModelScope.launch {
+            val result = storeRepository.getCategories()
+            _categories.value = result
+        }
+    }
+
+    fun setCategoryState(cate: Int) {
+        _categoryState.value = cate
     }
 
 }

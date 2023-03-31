@@ -3,6 +3,8 @@ package com.example.ecom
 import com.example.ecom.data.StoreApiService
 import com.example.ecom.data.StoreRepoImpl
 import com.example.ecom.domain.StoreRepository
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +16,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://192.168.1.227:8080"
+private const val BASE_URL = "http://192.168.0.103:8080"
+private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,7 +34,7 @@ object AppModule {
                     .addInterceptor(logging)
                     .build()
             )
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create()
     }

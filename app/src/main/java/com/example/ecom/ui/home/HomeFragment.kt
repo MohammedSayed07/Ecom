@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import com.example.ecom.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-
     private var _binding: FragmentHomeBinding? = null
 
     private val homeViewModel: HomeViewModel by viewModels()
@@ -28,7 +30,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.viewModel = homeViewModel
 
@@ -50,6 +52,26 @@ class HomeFragment : Fragment() {
 
         binding.categoryRecycler.adapter = categoryAdapter
 
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.categories
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect {
+                    categoryAdapter.submitList(it)
+                }
+            }
+        }
+
+        homeViewModel.categoryState.observe(viewLifecycleOwner, Observer {
+            categoryAdapter.initialSelectedPosition = it
+        })
+
+        categoryAdapter.selectedCategory = {
+            homeViewModel.getProducts(it)
+        }
+        categoryAdapter.selectedPosition = {
+            homeViewModel.setCategoryState(it)
+        }
 
         return binding.root
     }
