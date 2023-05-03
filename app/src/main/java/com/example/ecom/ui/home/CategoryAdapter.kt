@@ -40,7 +40,7 @@ class CategoryAdapter(): ListAdapter<String, CategoryAdapter.ViewHolder>(DiffCal
 
     object DiffCallback: DiffUtil.ItemCallback<String>(){
         override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem === newItem
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {

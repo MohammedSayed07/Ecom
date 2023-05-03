@@ -11,7 +11,8 @@
     </data>
 <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="10dp"
-        imageUrl="@{viewModel.selectedProduct.imageUrl}"
+        imageUrl="@{viewModel.selectedProduct.image}"
         android:src="@drawable/sales_pic_nobg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +60,7 @@
         android:textColor="@color/black"
         android:layout_marginTop="32dp"
         android:text="@{viewModel.selectedProduct.title}"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -160,16 +161,16 @@
         android:layout_marginTop="16dp"
         android:maxLines="5"
         android:minLines="5"
+        android:layout_marginEnd="8dp"
         android:textColor="@color/black"
         android:text="@{viewModel.selectedProduct.description}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/extended_fab"
+        android:id="@+id/addToCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="16dp"
@@ -180,9 +181,9 @@
         app:icon="@drawable/ic_baseline_add_shopping_cart_24"
         app:iconGravity="textStart"
         app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

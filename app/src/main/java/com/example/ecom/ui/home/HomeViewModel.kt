@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecom.data.Product
+import com.example.ecom.data.local.CartEntity
+import com.example.ecom.data.local.Database
+import com.example.ecom.domain.models.Product
 import com.example.ecom.domain.StoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -17,7 +19,8 @@ enum class StoreApiStatus {LOADING, ERROR, DONE}
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val storeRepository: StoreRepository
+    private val storeRepository: StoreRepository,
+    private val db: Database
 ) : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products = _products.asStateFlow()
@@ -54,7 +57,7 @@ class HomeViewModel @Inject constructor(
 
             _products.value = result
             _popularProducts.value = result.filter {
-                it.rating.rate > 7.0
+                it.rating.count > 300
             }
             _status.value = StoreApiStatus.DONE
         }
@@ -63,12 +66,23 @@ class HomeViewModel @Inject constructor(
     private fun getCategories() {
         viewModelScope.launch {
             val result = storeRepository.getCategories()
-            _categories.value = result
+            val list = mutableListOf<String>()
+            list.add("All")
+            for (i in result) {
+                list.add(i)
+            }
+            _categories.value = list
         }
     }
 
     fun setCategoryState(cate: Int) {
         _categoryState.value = cate
+    }
+
+    fun setupCart(cart: CartEntity) {
+        viewModelScope.launch {
+
+        }
     }
 
 }

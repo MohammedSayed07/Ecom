@@ -3,19 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
+    android:label="@string/navigation_cart"
     app:startDestination="@id/navigation_home">
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.ecom.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.ecom.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_cart"
+        android:name="com.example.ecom.ui.cart.CartFragment"
+        android:label="@string/navigation_cart"
+        tools:layout="@layout/fragment_cart" />
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.ecom.ui.home.HomeFragment"
@@ -23,7 +18,9 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_productDetailsFragment"
-            app:destination="@id/productDetailsFragment" />
+            app:destination="@id/productDetailsFragment"
+            app:enterAnim="@anim/from_bottom"
+            app:popExitAnim="@anim/to_bottom" />
     </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
@@ -32,6 +29,13 @@
         tools:layout="@layout/fragment_product_details">
         <argument
             android:name="product"
-            app:argType="com.example.ecom.data.Product" />
-    </fragment><action android:id="@+id/action_global_navigation_notifications" app:destination="@id/navigation_notifications"/><action android:id="@+id/action_global_navigation_dashboard" app:destination="@id/navigation_dashboard"/>
+            app:argType="com.example.ecom.domain.models.Product" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_navigation_cart"
+        app:destination="@id/navigation_cart"
+        app:enterAnim="@anim/from_left"
+        app:exitAnim="@anim/to_right"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right" />
 </navigation>

@@ -17,4 +17,10 @@
     <string name="description"><![CDATA[3D NAND flash are applied to deliver high transfer speeds Remarkable transfer speeds that enable faster bootup and improved overall system performance. The advanced SLC Cache Technology allows performance boost and longer lifespan 7mm slim design suitable for Ultrabooks and Ultra-slim notebooks. Supports TRIM command, Garbage Collection technology, RAID, and ECC (Error Checking & Correction) to provide the optimized performance and enhanced reliability.]]></string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="extended_fab_content_desc">Extended FAB</string>
+    <string name="cart">Cart</string>
+    <string name="navigation_cart">navigation_cart</string>
+    <string name="favorite">Favorite</string>
+    <string name="navigation_category">navigation_category</string>
+    <string name="categories">Categories</string>
+    <string name="check_out">Proceed to Checkout</string>
 </resources>

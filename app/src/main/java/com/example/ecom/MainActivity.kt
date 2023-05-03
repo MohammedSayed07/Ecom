@@ -1,16 +1,11 @@
 package com.example.ecom
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.example.ecom.databinding.ActivityMainBinding
-import com.example.ecom.ui.home.HomeFragment
-import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,12 +43,8 @@ class MainActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.navigation_dashboard -> {
-                    navController.navigate(MobileNavigationDirections.actionGlobalNavigationDashboard())
-                    true
-                }
-                R.id.navigation_notifications -> {
-                    navController.navigate(MobileNavigationDirections.actionGlobalNavigationNotifications())
+                R.id.navigation_cart -> {
+                    navController.navigate(MobileNavigationDirections.actionGlobalNavigationCart())
                     true
                 }
                 else -> false
