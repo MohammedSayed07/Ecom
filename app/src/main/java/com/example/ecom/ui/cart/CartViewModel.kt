@@ -3,23 +3,19 @@ package com.example.ecom.ui.cart
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecom.data.local.CartEntity
+import com.example.ecom.data.local.entities.CartEntity
 import com.example.ecom.data.local.Database
 import com.example.ecom.domain.StoreRepository
 import com.example.ecom.domain.models.CartItem
-import com.example.ecom.ui.home.StoreApiStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 enum class CartStatus {LOADING, ERROR, DONE}
@@ -37,17 +33,23 @@ class CartViewModel @Inject constructor(
     private val _status = MutableStateFlow<CartStatus>(CartStatus.DONE)
     val status = _status.asStateFlow()
 
-    init {
-        getCartProducts()
-    }
+    private val _userId = MutableStateFlow(0)
 
-    private fun getCartProducts() {
+    private var _isBackButtonPressed = false
+
+    private val confirmPopBackStackChannel = Channel<Unit>()
+    val confirmPopBackStack = confirmPopBackStackChannel.receiveAsFlow()
+
+    private val closeAppChannel = Channel<Unit>()
+    val closeApp = closeAppChannel.receiveAsFlow()
+
+    fun getCartProducts(userId: Int) {
         viewModelScope.launch {
-            storeRepository.getAllCartEntitiesFlow().shareIn(viewModelScope, started = SharingStarted.WhileSubscribed(), replay = 1).collect{
+            storeRepository.getUserWithCartsFlow(userId).shareIn(viewModelScope, started = SharingStarted.WhileSubscribed(), replay = 1).collect{
                 var total: Double? = 0.0
                 try {
                     if (total != null) {
-                        _products.value = it.map {
+                        _products.value = it.carts.map {
                             _status.value = CartStatus.LOADING
                             val product = storeRepository.getProduct(it.pid)
                             if (product != null) {
@@ -66,23 +68,40 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun decreaseQuantity(id: Int) {
+    fun decreaseQuantity(id: Int, userId: Int) {
         viewModelScope.launch {
             val cartEntity = storeRepository.getCartEntity(id)
-            val quantity = cartEntity.quantity - 1
-            if (quantity > 0)
-                storeRepository.updateCart(CartEntity(pid = id, quantity = quantity))
+            if ((cartEntity.quantity - 1) > 0)
+                storeRepository.updateCart(CartEntity(pid = id, quantity = cartEntity.quantity - 1, userId))
             else
                 storeRepository.deleteCart(cartEntity)
         }
     }
 
-    fun increaseQuantity(id: Int) {
+    fun increaseQuantity(id: Int, userId: Int) {
         viewModelScope.launch {
             val quantity = storeRepository.getCartEntity(id).quantity
 
-            storeRepository.updateCart(CartEntity(pid = id, quantity = quantity + 1))
+            storeRepository.updateCart(CartEntity(pid = id, quantity = quantity + 1, userId))
         }
+    }
+
+     fun backButtonPressed() {
+         viewModelScope.launch {
+             if (_isBackButtonPressed) {
+                 closeAppChannel.send(Unit)
+             } else {
+                 confirmPopBackStackChannel.send(Unit)
+             }
+
+             _isBackButtonPressed = true
+             var count = 4
+             while (count != 0) {
+                 delay(1000L)
+                 count--
+             }
+             _isBackButtonPressed = false
+         }
     }
 
 }

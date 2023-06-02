@@ -4,29 +4,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.ecom.R
+import com.example.ecom.SharedPreferencesManager
 import com.example.ecom.databinding.FragmentCartBinding
-import com.example.ecom.ui.home.StoreApiStatus
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CartFragment : Fragment() {
-
+    var count = 1
     private var _binding: FragmentCartBinding? = null
 
     private val viewModel: CartViewModel by viewModels()
 
+    private lateinit var sharedPreferencesManager: SharedPreferencesManager
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // in here you can do logic when backPress is clicked
+                viewModel.backButtonPressed()
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,12 +47,15 @@ class CartFragment : Fragment() {
     ): View {
         _binding = FragmentCartBinding.inflate(inflater, container, false)
 
+        sharedPreferencesManager = SharedPreferencesManager(requireContext())
+        val userId = sharedPreferencesManager.getUserId()
+        viewModel.getCartProducts(userId)
         viewLifecycleOwner
 
         val cartAdapter = CartAdapter(decreaseClicked = {
-            viewModel.decreaseQuantity(it)
+            viewModel.decreaseQuantity(it, userId)
         }, increaseClicked = {
-            viewModel.increaseQuantity(it)
+            viewModel.increaseQuantity(it, userId)
 
         })
 
@@ -79,6 +94,22 @@ class CartFragment : Fragment() {
                         }
                         else -> {}
                     }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.confirmPopBackStack.collectLatest {
+                        Toast.makeText(requireActivity(), "Are you sure you want to close the app?", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.closeApp.collectLatest {
+                    requireActivity().finish()
                 }
             }
         }

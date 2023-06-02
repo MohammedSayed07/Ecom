@@ -1,6 +1,7 @@
 package com.example.ecom.data.local
 
 import androidx.room.*
+import com.example.ecom.data.local.entities.CartEntity
 import kotlinx.coroutines.flow.Flow
 
 

@@ -1,56 +1,43 @@
 package com.example.ecom
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.ecom.databinding.ActivityMainBinding
+import com.example.ecom.ui.login.LoginFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
-
+    var count = 2
+    lateinit var binding: ActivityMainBinding
+    lateinit var navController: NavController
+    private val viewModel: MainActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navController = Navigation.findNavController(this, R.id.fragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer) as NavHostFragment
+        navController = navHostFragment.navController
 
-        binding.navView.setupWithNavController(navController)
-
-        val navigationBarView = binding.navView
-
-        navigationBarView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    var current = navController.backQueue.lastOrNull()
-                    if (current?.destination?.id == R.id.productDetailsFragment) {
-                        navController.popBackStack()
-                    }
-                    while (current != null) {
-                        if (current.destination.id != R.id.productDetailsFragment && current.destination.id != R.id.navigation_home) {
-                            navController.popBackStack()
-                            current = navController.backQueue.lastOrNull()
-                        } else {
-                            break
-                        }
-                    }
-                    true
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.logoutReceiver.collectLatest {
+                    navController.navigate(LoginFragmentDirections.actionGlobalLoginFragment())
                 }
-                R.id.navigation_cart -> {
-                    navController.navigate(MobileNavigationDirections.actionGlobalNavigationCart())
-                    true
-                }
-                else -> false
             }
         }
 
     }
+
+
 
 }

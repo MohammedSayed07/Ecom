@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecom.data.local.CartEntity
+import com.example.ecom.data.local.entities.CartEntity
 import com.example.ecom.data.local.Database
 import com.example.ecom.domain.models.Product
 import com.example.ecom.domain.StoreRepository
@@ -19,8 +19,7 @@ enum class StoreApiStatus {LOADING, ERROR, DONE}
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val storeRepository: StoreRepository,
-    private val db: Database
+    private val storeRepository: StoreRepository
 ) : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products = _products.asStateFlow()

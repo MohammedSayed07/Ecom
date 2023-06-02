@@ -1,4 +1,4 @@
-package com.example.ecom.data.local
+package com.example.ecom.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class CartEntity (
     @PrimaryKey
     val pid: Int,
-    val quantity: Int
+    val quantity: Int,
+    val userCreatorId: Int
 )

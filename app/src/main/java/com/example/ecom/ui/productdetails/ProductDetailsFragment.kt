@@ -5,21 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.databinding.adapters.TextViewBindingAdapter.OnTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.ecom.R
+import com.example.ecom.SharedPreferencesManager
 import com.example.ecom.databinding.FragmentProductDetailsBinding
-import com.example.ecom.domain.models.CartItem
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -29,6 +25,8 @@ class ProductDetailsFragment : Fragment() {
 
     private val viewModel: ProductDetailsViewModel by viewModels()
 
+    private lateinit var sharedPreferencesManager: SharedPreferencesManager
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -36,6 +34,12 @@ class ProductDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+
+        viewLifecycleOwner
+
+        sharedPreferencesManager = SharedPreferencesManager(requireContext())
+
+        val userId = sharedPreferencesManager.getUserId()
 
         val selectedProduct = ProductDetailsFragmentArgs.fromBundle(requireArguments()).product
 
@@ -48,14 +52,25 @@ class ProductDetailsFragment : Fragment() {
         }
 
         binding.addToCart.setOnClickListener {
-            requireActivity().lifecycleScope.launch {
-                viewModel.addItemToCart()
+            lifecycleScope.launch {
+                viewModel.addItemToCart(userId)
             }
             findNavController().popBackStack()
         }
 
         binding.heartButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Item added to the wish list", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                viewModel.addItemToWishlist(userId)
+            }
+            binding.heartButton.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite, 0, 0 ,0)
+        }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.addedToFavorite.collectLatest {
+                    Toast.makeText(requireContext(), "Added To Favorite", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         return binding.root

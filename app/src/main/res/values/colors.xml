@@ -11,4 +11,8 @@
     <color name="light_grey">#5BE1E1E1</color>
     <color name="product_card_color">#f3e5c3</color>
     <color name="size_button_color">#AFAFAF</color>
+    <color name="blue">#007AFF</color>
+    <color name="dark_blue">#0066CC</color>
+    <color name="light_gray">#EFEFF4</color>
+    <color name="gray">#CCCCCC</color>
 </resources>

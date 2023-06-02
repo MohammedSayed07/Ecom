@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/store_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.example.ecom.ui.cart.CartFragment"
+        android:label="@string/navigation_cart"
+        tools:layout="@layout/fragment_cart" />
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.ecom.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment"
+            app:enterAnim="@anim/from_bottom"
+            app:popExitAnim="@anim/to_bottom" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.ecom.ui.productdetails.ProductDetailsFragment"
+        android:label="ProductDetailsFragment"
+        tools:layout="@layout/fragment_product_details">
+        <argument
+            android:name="product"
+            app:argType="com.example.ecom.domain.models.Product" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_navigation_cart"
+        app:destination="@id/navigation_cart"
+        app:enterAnim="@anim/from_left"
+        app:exitAnim="@anim/to_right"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right"
+        app:popUpTo="@id/navigation_cart"
+        app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/wishlistFragment"
+        android:name="com.example.ecom.ui.wishlist.WishlistFragment"
+        android:label="fragment_wishlist"
+        tools:layout="@layout/fragment_wishlist" />
+    <action
+        android:id="@+id/action_global_wishlistFragment"
+        app:destination="@id/wishlistFragment"
+        app:enterAnim="@anim/from_left"
+        app:exitAnim="@anim/to_right"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right"
+        app:popUpTo="@id/wishlistFragment"
+        app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/navigation_user"
+        android:name="com.example.ecom.ui.user.UserFragment"
+        android:label="UserFragment"
+        tools:layout="@layout/fragment_user">
+        <action
+            android:id="@+id/action_navigation_user_to_mobile_navigation2"
+            app:destination="@id/mobile_navigation"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <include app:graph="@navigation/main_navigation" />
+    <action
+        android:id="@+id/action_global_navigation_user"
+        app:destination="@id/navigation_user"
+        app:enterAnim="@anim/from_left"
+        app:exitAnim="@anim/to_right"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right"
+        app:popUpTo="@id/navigation_user"
+        app:popUpToInclusive="true" />
+</navigation>
